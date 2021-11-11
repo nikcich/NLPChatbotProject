@@ -22,6 +22,7 @@ def main():
         userInput = input(">>" + user_model["name"] + ": ")
         if not userInput == sentinel:
             tokenized_input = process_input(userInput)
+            print(tokenized_input)
             matches = find_matching_term(tokenized_input, df)
             resp_idx = select_response(matches)
             chat_reply(resp_idx, df)
