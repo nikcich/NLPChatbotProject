@@ -71,8 +71,8 @@ else:
 tf.reset_default_graph()
 
 net = tflearn.input_data(shape=[None, len(training[0])])
-net = tflearn.fully_connected(net, 8)
-net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, 12)
+net = tflearn.fully_connected(net, 12)
 net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
 net = tflearn.regression(net)
 
@@ -98,7 +98,9 @@ def bag_of_words(s, words):
 
 def chat():
     user = {
-        "name":""
+        "name":"",
+        "likes":[],
+        "state":""
     }
     previousTag = ''
 
@@ -113,9 +115,10 @@ def chat():
         results_index = numpy.argmax(results)
         tag = labels[results_index]
 
+        if tag == "likes":
+            user["likes"].append(inp)
         if tag == "tellMore" and previousTag != '':
             tag = previousTag
-        
         
         for tg in data["intents"]:
             if tg['tag'] == tag:
@@ -124,17 +127,30 @@ def chat():
         if tag == "whoami" and user["name"] != '':
             responses = ['Your name is ' + user["name"]]
         
-
-
         print(">> Chatbot:", random.choice(responses))
+
+        if tag == "whoami" and len(user["likes"]) > 0:
+            like = random.choice(user["likes"])
+            like = like.replace('I am', "you are")
+            like = like.replace('i am', "you are")
+            like = like.replace("I'm", "you are")
+            like = like.replace("i'm", "you are")
+            like = like.replace('I ', "you")
+            like = like.replace('i ', "you")
+            
+            print(">> Chatbot: You also told me", like)
+
         if tag == "name":
             print(">> Chatbot:", "What is your name?")
             inp = input(">> Human: ")
             user["name"] = inp
             print(">> Chatbot: Nice to meet you", inp)
+        if tag == "howare":
+            print(">> Chatbot:", "How about you?")
+            inp = input(">> Human: ")
+            user["state"] = inp
+            print(">> Chatbot:", "Good to know.")
         
-
-
         previousTag = tag
 
 chat()
