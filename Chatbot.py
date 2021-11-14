@@ -135,8 +135,8 @@ def chat():
             like = like.replace('i am', "you are")
             like = like.replace("I'm", "you are")
             like = like.replace("i'm", "you are")
-            like = like.replace('I ', "you")
-            like = like.replace('i ', "you")
+            like = like.replace('I ', "you ")
+            like = like.replace('i ', "you ")
             
             print(">> Chatbot: You also told me", like)
 
